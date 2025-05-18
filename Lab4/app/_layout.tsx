@@ -4,12 +4,12 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Drawer } from "expo-router/drawer";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import store from "@/Store";
+import { Stack } from "expo-router";
+import { StatusBar } from "react-native";
 import { Provider } from "react-redux";
 
 export default function RootLayout() {
@@ -26,13 +26,13 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        {/* <Stack>
+        <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
-        <StatusBar style="auto" /> */}
+        <StatusBar />
 
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        {/* <GestureHandlerRootView style={{ flex: 1 }}>
           <Drawer>
             <Drawer.Screen
               name="index" // This is the name of the page and must match the url from root
@@ -49,7 +49,7 @@ export default function RootLayout() {
               }}
             />
           </Drawer>
-        </GestureHandlerRootView>
+        </GestureHandlerRootView> */}
       </ThemeProvider>
     </Provider>
   );
