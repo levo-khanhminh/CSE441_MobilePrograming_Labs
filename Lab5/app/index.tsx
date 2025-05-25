@@ -1,3 +1,5 @@
+import { User } from "@/type";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -11,8 +13,8 @@ import {
 } from "react-native";
 
 const LoginScreen = () => {
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("0373007856");
+  const [password, setPassword] = useState("123");
   const router = useRouter();
   async function handleLogin() {
     try {
@@ -25,12 +27,20 @@ const LoginScreen = () => {
       );
       if (res.status === 200) {
         Alert.alert("Susccessfully login");
-        router.navigate("/(tabs)");
+        await saveUserAndToken(res.data);
+        router.push("(tabs)/services");
       } else {
         Alert.alert("Unsucessfully login");
       }
     } catch (error: any) {
       Alert.alert("Unsucessfully login with error : " + error.message);
+    }
+  }
+  async function saveUserAndToken(user: User) {
+    try {
+      await AsyncStorage.setItem("user", JSON.stringify(user));
+    } catch (error: any) {
+      Alert.alert(error.message);
     }
   }
   return (
@@ -43,6 +53,7 @@ const LoginScreen = () => {
         style={styles.input}
       />
       <TextInput
+        textContentType="password"
         value={password}
         onChangeText={setPassword}
         placeholder="Password"
