@@ -1,7 +1,8 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { Icon } from "react-native-paper";
 
 const ServiceLayout = () => {
   const headerStyle = {
@@ -15,6 +16,7 @@ const ServiceLayout = () => {
     },
     headerTintColor: "white",
   };
+
   return (
     <>
       <Stack>
@@ -35,7 +37,22 @@ const ServiceLayout = () => {
         />
         <Stack.Screen
           name="detail"
-          options={{ ...headerStyle, headerTitle: "Service Detail" }}
+          options={{
+            ...headerStyle,
+            headerTitle: "Service Detail",
+            headerRight: () => (
+              <TouchableOpacity
+                style={{
+                  width: 50,
+                  height: 50,
+                  paddingTop: 10,
+                  marginLeft: 40,
+                }}
+              >
+                <Icon size={30} color={"white"} source="dots-vertical" />
+              </TouchableOpacity>
+            ),
+          }}
         />
         {/* <Stack.Screen
         name="(tabs)"

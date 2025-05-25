@@ -1,13 +1,35 @@
 import { Service } from "@/type";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface ServiceResponse extends Service {
   user: {
     name: string;
   };
+}
+async function handleDeleteService(id: string) {
+  try {
+    const userString = await AsyncStorage.getItem("user");
+    if (userString) {
+      const { token } = JSON.parse(userString);
+      const response = await axios.delete(
+        "https://kami-backend-5rs0.onrender.com/services/",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      Alert.alert("Successfullt delete service");
+    }
+  } catch (error: any) {
+    console.log(error.message);
+    Alert.alert("Error with delete service " + error.message);
+  }
 }
 
 const ServiceDetail = () => {
@@ -60,6 +82,42 @@ const ServiceDetail = () => {
           <Text style={{ fontWeight: "bold" }}>Final Update:</Text>
           {new Date(service?.updatedAt || "").toLocaleString()}
         </Text>
+      </View>
+      <View
+        style={{
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          columnGap: 15,
+          marginTop: 15,
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            backgroundColor: "green",
+            width: "30%",
+            padding: 10,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 20,
+          }}
+        >
+          <Text style={{ color: "white" }}>Update</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleDeleteService}
+          style={{
+            backgroundColor: "red",
+            width: "30%",
+            padding: 10,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 20,
+          }}
+        >
+          <Text style={{ color: "white" }}>Delete</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
