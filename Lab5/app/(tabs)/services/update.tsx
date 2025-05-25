@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   StyleSheet,
@@ -11,17 +11,28 @@ import {
   View,
 } from "react-native";
 
-const AddingService = () => {
+const ServiceUpdateForm = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  async function handleAddService() {
+  const { id } = useLocalSearchParams();
+  useEffect(() => {
+    axios
+      .get("https://kami-backend-5rs0.onrender.com/services/" + id)
+      .then((res) => {
+        const { name, price } = res.data;
+        setName(name);
+        setPrice(price.toString());
+      })
+      .catch((err) => console.log(err.message));
+  }, []);
+  async function handleUpdateService() {
     try {
       const userString = await AsyncStorage.getItem("user");
       if (userString) {
         const { token } = JSON.parse(userString);
 
-        const response = await axios.post(
-          "https://kami-backend-5rs0.onrender.com/services",
+        const response = await axios.put(
+          "https://kami-backend-5rs0.onrender.com/services/" + id,
           {
             name,
             price,
@@ -33,7 +44,7 @@ const AddingService = () => {
             },
           }
         );
-        Alert.alert("Succesfully add service");
+        Alert.alert("Succesfully update service");
         router.push("/services");
       } else {
         Alert.alert(
@@ -46,7 +57,7 @@ const AddingService = () => {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Adding Service</Text>
+      <Text style={styles.title}> Service Update</Text>
       <View style={{ width: "100%", marginBottom: 15 }}>
         <Text>Service name*</Text>
         <TextInput
@@ -65,15 +76,14 @@ const AddingService = () => {
           style={styles.input}
         />
       </View>
-      <TouchableOpacity onPress={handleAddService} style={styles.button}>
-        <Text style={styles.buttonText}>Add</Text>
+      <TouchableOpacity onPress={handleUpdateService} style={styles.button}>
+        <Text style={styles.buttonText}>Update</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default AddingService;
-
+export default ServiceUpdateForm;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

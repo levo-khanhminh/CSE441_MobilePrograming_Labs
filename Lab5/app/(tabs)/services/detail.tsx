@@ -1,7 +1,7 @@
 import { Service } from "@/type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -10,29 +10,9 @@ interface ServiceResponse extends Service {
     name: string;
   };
 }
-async function handleDeleteService(id: string) {
-  try {
-    const userString = await AsyncStorage.getItem("user");
-    if (userString) {
-      const { token } = JSON.parse(userString);
-      const response = await axios.delete(
-        "https://kami-backend-5rs0.onrender.com/services/",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      Alert.alert("Successfullt delete service");
-    }
-  } catch (error: any) {
-    console.log(error.message);
-    Alert.alert("Error with delete service " + error.message);
-  }
-}
 
 const ServiceDetail = () => {
+  const router = useRouter();
   const { id } = useLocalSearchParams();
   const [service, setService] = useState<ServiceResponse>();
   const toVND = (value: number) => {
@@ -51,6 +31,31 @@ const ServiceDetail = () => {
       .then((res) => setService(res.data))
       .catch((err) => console.log(err.message));
   }, []);
+  async function handleDeleteService(id: string | undefined) {
+    if (!id) {
+      return;
+    }
+    try {
+      const userString = await AsyncStorage.getItem("user");
+      if (userString) {
+        const { token } = JSON.parse(userString);
+        const response = await axios.delete(
+          "https://kami-backend-5rs0.onrender.com/services/" + id,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        Alert.alert("Successfullt delete service");
+        router.push("/services");
+      }
+    } catch (error: any) {
+      console.log(error.message);
+      Alert.alert("Error with delete service " + error.message);
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.item}>
@@ -94,6 +99,7 @@ const ServiceDetail = () => {
         }}
       >
         <TouchableOpacity
+          onPress={() => router.push(`/services/update?id=${service?._id}`)}
           style={{
             backgroundColor: "green",
             width: "30%",
@@ -106,7 +112,7 @@ const ServiceDetail = () => {
           <Text style={{ color: "white" }}>Update</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={handleDeleteService}
+          onPress={() => handleDeleteService(service?._id)}
           style={{
             backgroundColor: "red",
             width: "30%",

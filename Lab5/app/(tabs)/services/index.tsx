@@ -31,16 +31,11 @@ export default function HomeScreen() {
     }
   }, []);
   async function getUserAndToken() {
-    try {
-      const userString = await AsyncStorage.getItem("user");
-      if (userString) {
-        setUser(JSON.parse(userString));
-        Alert.alert(user?.token || "");
-      } else {
-        Alert.alert("Erorr with  json string");
-      }
-    } catch (error: any) {
-      Alert.alert(error.message);
+    const userString = await AsyncStorage.getItem("user");
+    if (userString) {
+      setUser(JSON.parse(userString));
+    } else {
+      Alert.alert("Erorr with  json string");
     }
   }
   return (

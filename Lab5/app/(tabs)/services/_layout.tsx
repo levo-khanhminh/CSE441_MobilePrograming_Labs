@@ -54,6 +54,13 @@ const ServiceLayout = () => {
             ),
           }}
         />
+        <Stack.Screen
+          name="update"
+          options={{
+            ...headerStyle,
+            headerTitle: "Service Update",
+          }}
+        />
         {/* <Stack.Screen
         name="(tabs)"
         options={{
