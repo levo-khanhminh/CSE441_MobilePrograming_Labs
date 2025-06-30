@@ -27,11 +27,7 @@ const Detail = () => {
           <CustomText style={styles.title} variant="titleLarge">
             {product.title}
           </CustomText>
-          {/* <CustomText variant="bodyMedium">
-      
-                        </CustomText> */}
           <CustomText>Category :{product.category}</CustomText>
-          {/* <CustomText>{product.description}</CustomText> */}
           <CustomText>Discount : {product.discountPercentage}</CustomText>
         </Card.Content>
         <Card.Cover source={{ uri: product.images[0] }} />
@@ -40,12 +36,6 @@ const Detail = () => {
           <CustomButton>Delete</CustomButton>,
         </Card.Actions>
       </Card>
-      {/* <Text style={styles.title}>{product.title}</Text>
-      <Image source={{ uri: product.thumbnail }} style={styles.image} />
-      <Text>{product.description}</Text>
-      <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-        Price: ${product.price}
-      </Text> */}
     </View>
   );
 };
