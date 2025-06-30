@@ -14,6 +14,7 @@ import {
 const AddingService = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  
   async function handleAddService() {
     try {
       const userString = await AsyncStorage.getItem("user");

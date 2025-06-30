@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Button, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 type ErrorProps = {
   title: string;
   description: string;
@@ -78,7 +78,8 @@ const ProductAddForm = () => {
     imageUrl: "",
   });
   return (
-    <View style={styles.container}>
+   <SafeAreaView>
+     <View style={styles.container}>
       <Text style={styles.title}>Add Product</Text>
       <View style={styles.form}>
         <View style={styles.formItems}>
@@ -205,6 +206,7 @@ const ProductAddForm = () => {
         </View>
       </View>
     </View>
+   </SafeAreaView>
   );
 };
 
